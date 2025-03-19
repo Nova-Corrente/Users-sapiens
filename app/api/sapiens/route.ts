@@ -10,7 +10,7 @@ export async function GET() {
     try {
         const users = await ListUsers();
 
-        const usersWithStringBigInt = users.map(user => ({
+        const usersWithStringBigInt = users?.map(user => ({
             ...user,
             numsec: user.numsec.toString(),
             r911mod: user.r911mod.map(mod => ({

@@ -33,5 +33,8 @@ export async function ListUsers() {
         }
     });
 
-    return users;
+    if (users) {
+        await prisma.$disconnect();
+        return users;
+    }
 }

@@ -50,7 +50,10 @@ export default function Home() {
   }, []);
 
   if (!Array.isArray(datas?.users)) {
-    return <div className="flex h-screen flex-col items-center justify-center text-4xl">Aguarde! Dados sendo Carregando...</div>
+    console.error('Invalid data format:', datas);
+    // Handle the error or return a fallback UI
+    return <div className="flex h-screen flex-col items-center justify-center text-4xl">Erro ao carregar dados</div>
+
   }
 
   function convertDate(dateTime: string) {
