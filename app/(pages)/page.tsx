@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 interface Module {
   modnam: string;
   numsec?: number;
-}[]
+}
 
 interface UserData {
   numsec: number;
@@ -15,7 +15,7 @@ interface UserData {
   appnam: string;
   appknd?: string;
   idinst?: string | number;
-}[]
+}
 
 interface Datas {
   dateUpdate: string;
@@ -27,33 +27,27 @@ export default function Home() {
   const [datas, setDatas] = useState<Datas | null>(null)
 
   useEffect(() => {
-
     const interval = setInterval(() => {
-      setLoading(true)
-    // Fetch data from the API
-    fetch('http://localhost:3000/api/sapiens', {
-      cache: 'no-store', // Disable caching to ensure fresh data on each request
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      setDatas(data)
-      setLoading(false)
-    })
-    .catch((error) => {
-      console.error('Error fetching data:', error);
-      setLoading(false);
-    });
-    }
-    , 10000); // 10 seconds interval
-
+      setLoading(true);
+      // Fetch data from the API
+      fetch('http://localhost:3000/api/sapiens', {
+        cache: 'no-store', // Disable caching to ensure fresh data on each request
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        setDatas(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      });
+    }, 10000); // 10 seconds interval
     // Cleanup function to clear the interval
     return () => {
       clearInterval(interval);
-    }
-
-  }, [])
-
-  
+    };
+  }, []);
 
   if (!Array.isArray(datas?.users)) {
     return <div className="flex h-screen flex-col items-center justify-center text-4xl">Aguarde! Dados sendo Carregando...</div>
@@ -112,10 +106,10 @@ export default function Home() {
     return count;
   }
 
-  const module = countSuprimentos(datas.users);
+  const moduleCount = countSuprimentos(datas.users);
 
-  if (isLoading) return <p className="flex h-screen flex-col items-center justify-center text-4xl">Aguarde! Carregando...</p>
-  if (!datas) return <p className="flex h-screen flex-col items-center justify-center text-4xl">No profile data</p>
+  if (isLoading) return <p className="flex h-screen flex-col items-center justify-center text-4xl">Aguarde! Carregando...</p>;
+  if (!datas) return <p className="flex h-screen flex-col items-center justify-center text-4xl">No profile data</p>;
 
   return (
     <div className="">
@@ -126,7 +120,7 @@ export default function Home() {
             <tr>
               <td className="border-x-2 w-[190px] p-2">{`Hoje é: ${datas.dateUpdate}`}</td>
               <td className="border-x-2 p-2">{`Total de acessos: ${datas.users.length}`}</td>
-              <td className={`flex p-2 items-center justify-center ${module === 10 ? "bg-red-700 font-bold" : "bg-green-500 font-bold"}`}>{`Total de uso do modulo Suprimentos: ${module}`}</td>
+              <td className={`flex p-2 items-center justify-center ${moduleCount === 10 ? "bg-red-700 font-bold" : "bg-green-500 font-bold"}`}>{`Total de uso do modulo Suprimentos: ${moduleCount}`}</td>
             </tr>
           </table>
         </div>
