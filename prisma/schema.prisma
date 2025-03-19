@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model r911sec {
+  numsec  BigInt    @id(clustered: false, map: "cp_r911sec")
+  dattim  Decimal?  @db.Decimal(14, 6)
+  comnam  String?   @db.VarChar(60)
+  usrnam  String?   @db.VarChar(60)
+  appnam  String?   @db.VarChar(255)
+  appusr  String?   @db.VarChar(60)
+  idinst  Int?      @db.SmallInt
+  admmsg  Int?      @db.SmallInt
+  appknd  Int?      @db.SmallInt
+  r911mod r911mod[]
+}
+
+model r911srv {
+  numsrv BigInt @id(clustered: false, map: "cp_r911srv")
+  numsec BigInt
+
+  @@index([numsec], map: "r911srvnumsec")
+}
+
+model r911mod {
+  numsec  BigInt
+  modnam  String  @db.VarChar(30)
+  r911sec r911sec @relation(fields: [numsec], references: [numsec], onUpdate: NoAction, map: "ir_r911mod_000")
+
+  @@id([numsec, modnam], map: "cp_r911mod", clustered: false)
+}
