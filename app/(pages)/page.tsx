@@ -67,7 +67,7 @@ export default function Home() {
     }
 
     const date = excelSerialToDate(serialNumber);
-
+    
     const formattedDate = date.toLocaleDateString('pt-BR', {
       day: '2-digit',
       month: '2-digit',
@@ -100,19 +100,19 @@ export default function Home() {
 
   // crie uma função para contar quantos usuarios estão no módulo suprimentos
   function countSuprimentos(users: UserData[]) {
-    let count = 0;
+    let count = 0
     users.forEach(user => {
       if (user.r911mod.some(mod => mod.modnam === "S")) {
-        count++;
+        count++
       }
-    });
-    return count;
+    })
+    return count
   }
 
   const moduleCount = countSuprimentos(datas.users);
 
-  if (isLoading) return <p className="flex h-screen flex-col items-center justify-center text-4xl">Aguarde! Carregando...</p>;
-  if (!datas) return <p className="flex h-screen flex-col items-center justify-center text-4xl">No profile data</p>;
+  if (isLoading) return <p className="flex h-screen flex-col items-center justify-center text-4xl">Aguarde! Carregando...</p>
+  if (!datas) return <p className="flex h-screen flex-col items-center justify-center text-4xl">No profile data</p>
 
   return (
     <div className="">
@@ -158,5 +158,5 @@ export default function Home() {
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
       </footer>
     </div>
-  );
+  )
 }
