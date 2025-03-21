@@ -30,7 +30,7 @@ export default function Home() {
     const interval = setInterval(() => {
       setLoading(true);
       // Fetch data from the API
-      fetch('http://localhost:3000/api/sapiens', {
+      fetch('/api/sapiens', {
         cache: 'no-store', // Disable caching to ensure fresh data on each request
       })
       .then((response) => response.json())
@@ -50,10 +50,19 @@ export default function Home() {
   }, []);
 
   if (!Array.isArray(datas?.users)) {
+    // Handle the case where datas.users is not an array
     console.error('Invalid data format:', datas);
     // Handle the error or return a fallback UI
-    return <div className="flex h-screen flex-col items-center justify-center text-4xl">Erro ao carregar dados</div>
+    // Exibe uma mensagem de erro ou um fallback UI
+    return (
+      <div className="flex h-screen flex-col items-center justify-center text-4xl">
+        {`Erro ao carregar dados Aguarde nova tentativa em 10 segundos!`}
+      </div>
+    );
+  }
 
+  if (datas.users.length === 0) {
+    return <div className="flex h-screen flex-col items-center justify-center text-4xl">{`Erro ao carregar dados Aguarde nova tentativa em 10 segundos!`}</div>
   }
 
   function convertDate(dateTime: string) {
@@ -144,12 +153,12 @@ export default function Home() {
             {datas.users.map((user) => (
               <tr key={user.numsec.toString()} className="border-2">
                 <td className="border-2 items-center justify-center pl-2">{getModuleName(user.r911mod)}</td>
-                <td className="flex items-center justify-center">{user.numsec.toString()}</td>
+                <td className="text-center">{user.numsec.toString()}</td>
                 <td className="border-2 items-center justify-center pl-2">{user.appusr}</td>
                 <td className="border-2 items-center justify-center pl-2">{user.usrnam}</td>
                 <td className="border-2 text-center">{user.comnam}</td>
                 <td className="border-2 text-center">{user.appnam}</td>
-                <td className="flex flex-col text-center items-center justify-center">{convertDate(user.dattim)}</td>
+                <td className="text-center">{convertDate(user.dattim)}</td>
               </tr>
             ))}
           </tbody>

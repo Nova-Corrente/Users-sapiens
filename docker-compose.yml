@@ -1,0 +1,15 @@
+services:
+  app_qualy_homolog:
+    image: node:20.18-slim
+    container_name: app_users_sapiens
+    working_dir: /app
+    restart: unless-stopped
+    volumes:
+      - /home/suporte/projetos/users_sapiens/Users-sapiens/:/app
+    tty: true
+    network_mode: "host"
+    command: >
+      sh -c "
+      chmod +x script.sh &&
+      ./script.sh
+      "
