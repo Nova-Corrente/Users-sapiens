@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import { Head } from "./components/head/head";
+import { LogoLoading } from "./components/logoLoading/logo-loading";
 interface Module {
   modnam: string;
   numsec?: number;
@@ -53,17 +54,11 @@ export default function Home() {
   if (!Array.isArray(datas?.users)) {
     // Handle the case where datas.users is not an array
     console.error('Invalid data format:', datas);
-    // Handle the error or return a fallback UI
-    // Exibe uma mensagem de erro ou um fallback UI
-    return (
-      <div className="flex h-screen flex-col items-center justify-center text-4xl">
-        {`Erro ao carregar dados Aguarde nova tentativa em 10 segundos!`}
-      </div>
-    );
+    return <LogoLoading /> // Exibe o loading
   }
 
   if (datas.users.length === 0) {
-    return <div className="flex h-screen flex-col items-center justify-center text-4xl">{`Erro ao carregar dados Aguarde nova tentativa em 10 segundos!`}</div>
+    return <LogoLoading /> // Exibe o loading em vez da mensagem de erro
   }
 
   function convertDate(dateTime: string) {
@@ -121,7 +116,7 @@ export default function Home() {
 
   const moduleCount = countSuprimentos(datas.users);
 
-  if (isLoading) return <p className="flex h-screen flex-col items-center justify-center text-4xl">Aguarde! Carregando...</p>
+  if (isLoading) return <LogoLoading />
   if (!datas) return <p className="flex h-screen flex-col items-center justify-center text-4xl">No profile data</p>
 
   return (
