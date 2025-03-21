@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Head } from "./components/head/head";
 import { LogoLoading } from "./components/logoLoading/logo-loading";
 interface Module {
@@ -27,27 +27,50 @@ interface Datas {
 export default function Home() {
   const [isLoading, setLoading] = useState(true)
   const [datas, setDatas] = useState<Datas | null>(null)
+  const isFirstLoad = useRef(true)
+
+  // Função para buscar dados
+  const fetchData = () => {
+    setLoading(true);
+    fetch('/api/sapiens', {
+      cache: 'no-store',
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      setDatas(data);
+      setLoading(false);
+    })
+    .catch((error) => {
+      console.error('Error fetching data:', error);
+      setLoading(false);
+    });
+  }
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setLoading(true);
-      // Fetch data from the API
-      fetch('/api/sapiens', {
-        cache: 'no-store', // Disable caching to ensure fresh data on each request
-      })
-      .then((response) => response.json())
-      .then((data) => {
-        setDatas(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      });
-    }, 10000); // 10 seconds interval
-    // Cleanup function to clear the interval
+    let timer: NodeJS.Timeout;
+
+    // Primeira execução: espera 5 segundos
+    if (isFirstLoad.current) {
+      // Carrega dados imediatamente para não ficar com a tela vazia
+      fetchData();
+      
+      // Define um timer para carregar depois de 5 segundos
+      timer = setTimeout(() => {
+        fetchData();
+        isFirstLoad.current = false;
+        
+        // Depois do primeiro carregamento, configura o intervalo de 30 segundos
+        timer = setInterval(fetchData, 30000);
+      }, 30000); // 5 segundos
+    } else {
+      // Execuções subsequentes: intervalo de 30 segundos
+      timer = setInterval(fetchData, 30000);
+    }
+    
+    // Limpar o timer quando o componente for desmontado
     return () => {
-      clearInterval(interval);
+      clearTimeout(timer);
+      clearInterval(timer);
     };
   }, []);
 
