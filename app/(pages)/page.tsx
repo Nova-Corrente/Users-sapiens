@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from "react";
+import { Head } from "./components/head/head";
 interface Module {
   modnam: string;
   numsec?: number;
@@ -125,10 +126,10 @@ export default function Home() {
 
   return (
     <div className="">
-      <main className="flex flex-col gap-8 text-white justify-center items-center py-4">
-        <h1 className="text-2xl">Monitoramento Usuários do Sapiens</h1>
+      <Head />
+      <main className="flex flex-col gap-8 justify-center items-center py-4">
         <div className="flex justify-start w-full pl-[12.5%] text-xl">
-          <table className="text-white w-10/12 border-2 border-cyan-50" >
+          <table className="w-10/12 border-2 " >
             <tr>
               <td className="border-x-2 w-[190px] p-2">{`Hoje é: ${datas.dateUpdate}`}</td>
               <td className="border-x-2 p-2">{`Total de acessos: ${datas.users.length}`}</td>
@@ -136,10 +137,10 @@ export default function Home() {
             </tr>
           </table>
         </div>
-        <table className="text-white w-10/12 border-2 border-cyan-50" >
+        <table className="w-10/12 border-2" >
           <caption className="sr-only">Usuários</caption>
           <thead className="">
-            <tr className="border-cyan-50">
+            <tr className="">
               <th className="w-[210px] border-x-2">MÓDULOS</th>
               <th className="w-[120px]">ID_CONEXÃO</th>
               <th className="w-[200px] border-x-2">CONNECT_SAPIENS</th>
